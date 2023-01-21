@@ -1,0 +1,50 @@
+application {
+  config {
+    baseName blog,
+    applicationType monolith,
+    packageName ar.edu.um.isa.blog,
+    buildTool maven,
+    devDatabaseType mariadb,
+    prodDatabaseType mariadb,
+    authenticationType jwt,
+    testFrameworks [cypress],
+    clientTheme sketchy,
+    languages [es,en],
+    nativeLanguage es,
+    enableSwaggerCodegen true,
+  }
+  entities *
+}
+
+
+entity User {
+    name String,
+    email String,
+    password String
+}
+
+entity Poem {
+    title String,
+    content TextBlob,
+    author User
+}
+
+entity Review {
+    content TextBlob,
+    rating Integer,
+    author User,
+    poem Poem
+}
+
+relationship OneToMany {
+    User{poem} to Poem{author}
+}
+
+relationship ManyToOne {
+    Review{poem} to Poem{review}
+    Review{author} to User{review}
+}
+
+dto * with mapstruct
+paginate * with pagination
+service * with serviceImpl
